@@ -1,0 +1,158 @@
+swagger: "2.0"
+info:
+  description: "Service to determine the PSI product eligibility "
+  version: "1.0.0"
+  title: "PSI Eligibility API"
+tags:
+- name: "psi-eligibility-api"
+  description: "determine the PSI product eligibility for vehicles"
+paths:
+  /eligibility:
+    post:
+      tags:
+      - "eligibility"
+      summary: "determine the PSI product eligibility for vehicles"
+      description: ""
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Parameters that needs"
+        required: true
+        schema:
+          $ref: "#/definitions/Input"
+      responses:
+        200:
+          description: "OK"
+          schema:
+              $ref: '#/definitions/Output' 
+        404:
+          description: "Vehicle doesn't exist"
+        400:
+          description: "Invalid request"
+          schema:
+            type: "object"
+            properties:
+              message: 
+                example: "Missing field 'sblu'"
+        500:
+          description: "Any service error"
+          schema:
+            type: "object"
+            properties:
+              message: 
+                example: "error_message"        
+
+
+definitions:
+  Input:
+    type: "object"
+    required:
+    - "auction"
+    - "sblu"
+    - "oveAllowed"
+    properties:
+      auction:
+        type: "string"
+        example: "AAA"
+      sblu:
+        type: "integer"
+        example: 1234567
+      oveAllowed:
+        type: "boolean"
+        example: false
+  Output:
+    type: "object"
+    properties:
+      auction: 
+        type: "string"
+        example: AAA
+      sblu: 
+        type: "integer"
+        example: 1234567
+      workorder:
+        type: "integer"
+        example: 1234567
+      vehicleInfo:
+        type: "object"
+        properties:
+          vehicleYear: 
+            type: "integer"
+            example: 2007
+          vehicleMake:
+            type: "string"
+            example: Volvo
+          vehicleModel:
+            type: "string"
+            example: XC70
+          vehicleTrim: 
+            type: "string"
+            example: "Base"
+          vehicleType: 
+            type: "string"
+            example: "Passenger"
+          vin: 
+            type: "string"
+            example: "YV4SZ592671288088"
+          odometerValue: 
+            type: "integer"
+            example: 72648
+          odometerMeasure: 
+            type: "string"
+            example: "M"
+      saleInfo:
+        type: "object"
+        properties:
+          salePrice:
+            type: "integer"
+            example: 11000
+          saleTimestamp:
+            type: "string"
+            example: "2020-03-30T18:25:43.511Z"
+          channel: 
+            type: "string"
+            example: "In-Lane"
+          redLight: 
+            type: "boolean"
+            example: false
+          blueLight:
+            type: "boolean"
+            example: true
+          greenLight:
+            type: "boolean"
+            example: true
+          yellowLight:
+            type: "boolean"
+            example: false
+          status:
+            type: "string"
+            example: "Sold"
+          saleType: 
+            type: "string"
+            example: "open"
+      eligibility:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            product:
+              type: "object"
+              properties:
+                id: 
+                  type: "string"
+                  example: "psi_7day"
+                description: 
+                  type: "string"
+                  example: "Seven Day Guarantee PSI"
+                eligible: 
+                  type: "boolean"
+                  example: true
+                price: 
+                  type: "integer"
+                  example: 150
+                reason: 
+                  type: "string"
+                  example: "Eligible"
